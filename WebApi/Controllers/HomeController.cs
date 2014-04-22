@@ -19,5 +19,10 @@ namespace WebApi.Controllers
         {
             return PartialView();
         }
+
+        public PartialViewResult Details()
+        {
+            return PartialView();
+        }
     }
 }

@@ -4,12 +4,36 @@ TodoApp.config(function ($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(true);
     $routeProvider.
         when('/', { controller: ListCtrl, templateUrl: 'home/list' }).
-          otherwise({ redirectTo: '/' });
+        when('/new', { controller: CreateCtrl, templateUrl: 'home/details' }).
+        when('/edit/:editId', { controller: EditCtrl, templateUrl: 'home/details' }).
+        otherwise({ redirectTo: '/' });
+    $locationProvider.html5Mode(false);
 });
 
 TodoApp.factory('Todo', function ($resource) {
     return $resource('/api/todo/:id', { id: '@id' }, { update: { method: 'PUT' } });
 });
+
+var CreateCtrl = function ($scope, $location, Todo) {
+    $scope.action = "Add"
+    $scope.save = function () {
+        Todo.save($scope.item, function () {
+            $location.path('/');
+        });
+    };
+};
+
+var EditCtrl = function ($scope, $location, $routeParams, Todo) {
+    $scope.action = "Update"
+    var id = $routeParams.editId;
+    $scope.item = Todo.get({ id: id });
+
+    $scope.save = function () {
+        Todo.update({ id: id }, $scope.item, function () {
+            $location.path('/');
+        });
+    };
+};
 
 var ListCtrl = function ($scope, $location, Todo) {
     $scope.search = function () {
@@ -55,6 +79,13 @@ var ListCtrl = function ($scope, $location, Todo) {
 
     $scope.sort_order = "Priority";
     $scope.is_desc = false;
+
+    $scope.delete = function () {
+        var id = this.todo.Id;
+        Todo.delete({ id: id }, function () {
+            $('#todo_' + id).fadeOut();
+        });
+    };
 
     $scope.reset();
 };

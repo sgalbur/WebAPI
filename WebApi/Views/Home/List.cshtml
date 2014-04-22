@@ -27,12 +27,17 @@
         <span ng-show="sort_order=='DueDate' && is_desc==true" class="glyphicon glyphicon-arrow-down"></span>
         <span ng-show="sort_order=='DueDate' && is_desc==false" class="glyphicon glyphicon-arrow-up"></span>
     </th>
-    </thead>
+    <th><a href="#/new"><span class="glyphicon glyphicon-plus-sign"></span></a></th>
+    </th>
     <tbody>
-        <tr ng-repeat="item in items">
-            <td>{{item.Text}}</td>
-            <td>{{item.Priority}}</td>
-            <td>{{item.DueDate | date:mediumDate}}</td>
+        <tr ng-repeat="todo in items" id="todo_{{todo.Id}}">
+            <td>{{todo.Text}}</td>
+            <td>{{todo.Priority}}</td>
+            <td>{{todo.DueDate | date:mediumDate}}</td>
+            <td>
+                <a href="#/edit/{{todo.Id}}"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-click="delete()"><span class="glyphicon glyphicon-remove"></span></a>
+            </td>
         </tr>
     </tbody>
 </table>
