@@ -18,6 +18,11 @@ namespace WebApi.Models
         public TodoContext() : base("name=TodoContext")
         {
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer(
+                new MigrateDatabaseToLatestVersion<TodoContext, Migrations.Configuration>());
+        }
 
         public System.Data.Entity.DbSet<WebApi.Models.Todo> Todoes { get; set; }
     
